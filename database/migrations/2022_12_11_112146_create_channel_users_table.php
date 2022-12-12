@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('channel_id')->unsigned();
             $table->bigInteger('user_id')->unsigned();
+            $table->tinyInteger('is_admin')->unsigned();
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('channel_id')
