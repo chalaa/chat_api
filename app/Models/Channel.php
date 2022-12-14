@@ -29,14 +29,14 @@ class Channel extends Model
     //channel belongsTo user as admin
     public function user()
     {
-        return $this->belongsToMany(User::class,'user_id','id');
+        return $this->belongsToMany(User::class,'channel_users','user_id','id');
     }
 
     //channel belongs to many users
-    public function channel_users()
-    {
-        return $this->belongsToMany(ChannelUser::class, 'channel_id','id');
-    }
+    // public function channel_users()
+    // {
+    //     return $this->belongsToMany(ChannelUser::class, 'channel_id','id');
+    // }
 
     // channel has many chat_messages
     public function channel_chat_messages(){

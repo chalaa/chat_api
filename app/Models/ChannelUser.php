@@ -14,17 +14,19 @@ class ChannelUser extends Model
 
     protected $fillable = [
         'channel_id',
-        'user_id',];
+        'user_id',
+        'is_admin'
+    ];
 
     protected $guarder = [];
 
-    public function channel()
-    {
-        return $this->hasMany(Channel::class,'channel_id','id');
-    }
+    // public function channel()
+    // {
+    //     return $this->hasMany(Channel::class,'channel_id','id');
+    // }
 
-    public function user()
-    {
-        return $this->hasMany(User::class,'user_id','id');
-    }
+    // public function user()
+    // {
+    //     return $this->hasMany(User::class,'user_id','id');
+    // }
 }

@@ -22,14 +22,14 @@ class GroupUser extends Model
     protected $guarded = [];
 
     // user has many groups
-    public function group()
-    {
-        return $this->hasMany(Group::class,'group_id','id');
-    }
+    // public function group()
+    // {
+    //     return $this->hasMany(Group::class,'group_id','id');
+    // }
 
-    //groups has many users
-    public function user()
-    {
-        return $this->hasMany(User::class,'user_id','id');
-    }
+    // //groups has many users
+    // public function user()
+    // {
+    //     return $this->hasMany(User::class,'user_id','id');
+    // }
 }

@@ -21,9 +21,9 @@ class Group extends Model
     ];
 
     // group belongs to many users 
-    public function group_users(){
-        return $this->belongsToMany(GroupUser::class, 'group_id','id');
-    }
+    // public function group_users(){
+    //     return $this->belongsToMany(GroupUser::class, 'group_id','id');
+    // }
 
     //group has many chat_messages
     public function group_chat_messages(){
@@ -34,6 +34,6 @@ class Group extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'group_id','id');
+        return $this->belongsToMany(User::class,'group_users','group_id','id');
     }
 }

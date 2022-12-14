@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Models\UserProfilePicture;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules;
+
 
 class UserController extends Controller
 {
@@ -37,15 +42,31 @@ class UserController extends Controller
     public function store(Request $request)
     {
         //
-        $validated_data= $request->validate([
-            'username' => 'required|string|unique:users',
-            'email' => 'required|string|unique:users|email',
-            'password' => 'required|string|min:8|confirmed'
+        $request->validate([
+            'username' => ['required', 'string', 'max:255','unique:users,username'],
+            'email' => ['required', 'string', 'max:255','unique:users,email','email'],
+            'password' =>  ['required', 'confirmed', Rules\Password::defaults()],
+            'image' => 'required|image'
         ]);
 
-        $data = User::create($validated_data);
+        $data = new User([
+            'username' => $request->get('username'),
+            'email' => $request->get('email'),
+            'password'=> Hash::make($request->get('password')),
+        ]);
 
-        return $data;
+        $data->save();
+
+        $image_path =  $request->file('image')->store('userProfilePicture','public');
+
+        $profilePicture = new UserProfilePicture([
+            'user_id' => $data->id,
+            'url'=> $image_path
+        ]);
+        
+        $profilePicture->save();
+
+        return new UserResource($data);
 
     }
 
@@ -58,7 +79,11 @@ class UserController extends Controller
     public function show($id)
     {
         //
-        return User::find($id);
+        $user =  User::find($id);
+        if(is_null($user)){
+            return response()->json("user not found",404);
+        }
+        return $user;
     }
 
     /**
@@ -82,6 +107,27 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         //
+
+        $request->validate([
+            'username' => ['string', 'max:255'],
+            'email' => ['string', 'max:255','email'],
+            'password' =>  ['confirmed', Rules\Password::defaults()],
+        ]);
+
+        $user = User::find($id);
+
+        if(is_null($user)){
+            return response()->json("user not found",404);
+        }
+        else{
+            $user->update([
+                'username' => ($request->get('username') == null) ? $user->username : $request->get('username'),
+                'email' => ($request->get('email') == null)? $user->email : $request->get('email'),
+                'password' => ($request->get('password') == null)? $user->password :Hash::make($request->get('password')),
+            ]);
+            
+            return $user;
+        }
     }
 
     /**
@@ -93,5 +139,6 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+
     }
 }

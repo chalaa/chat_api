@@ -4,13 +4,14 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -44,23 +45,23 @@ class User extends Authenticatable
 
     //user has many channel
     public function channel(){
-        return $this->hasMany(Channel::class,'user_id','id');
+        return $this->belongsToMany(Channel::class,'channel_users','user_id','id');
     }
 
     //user has many groups
     public function groups(){
-        return $this->hasMany(Group::class,'user_id','id');
+        return $this->belongsToMany(Group::class,'group_users','user_id','id');
     }
 
-    // user uses many channels
-    public function channel_users(){
-        return $this->belongsToMany(ChannelUser::class,'user_id','id');
-    }
+    // // user uses many channels
+    // public function channel_users(){
+    //     return $this->belongsToMany(ChannelUser::class,'user_id','id');
+    // }
 
-    //user uses many groups
-    public function group_users(){
-        return $this->belongsToMany(GroupUser::class,'user_id','id');
-    }
+    // //user uses many groups
+    // public function group_users(){
+    //     return $this->belongsToMany(GroupUser::class,'user_id','id');
+    // }
 
     //user has many user profile pictures
     public function user_profile_pictures()
@@ -68,4 +69,19 @@ class User extends Authenticatable
         return $this->hasMany(UserProfilePicture::class,'user_id','id');
     } 
     
+    public function chat_user_1(){
+        return $this->hasMany(Chat::class,'user_1','id');
+    }
+
+    public function chat_user_2(){
+        return $this->hasMany(Chat::class,'user_2','id');
+    }
+
+    public function chat_message_sender(){
+        return $this->hasMany(ChatMessage::class,'sender_id','id');
+    }
+
+    public function chat_message_receiver(){
+        return $this->hasMany(ChatMessage::class,'receiver_id','id');
+    }
 }
