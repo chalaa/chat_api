@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserProfilePictureController;
 use App\Models\UserProfilePicture;
@@ -28,4 +29,8 @@ Route::prefix('/user')->group(function(){
     Route::put('/{id}',[UserController::class,'update']);
     Route::post('/profile/{id}',[UserProfilePictureController::class,'store']);
 });
+Route::get('/chat',[ChatController::class,'index']);
+Route::get('/chat/{id}',[ChatController::class,'show']);
+Route::post('/chat',[ChatController::class,'store']);
+Route::delete('/chat/{id}/{id2}',[ChatController::class,'destroy']);
 

@@ -46,7 +46,7 @@ class UserController extends Controller
             'username' => ['required', 'string', 'max:255','unique:users,username'],
             'email' => ['required', 'string', 'max:255','unique:users,email','email'],
             'password' =>  ['required', 'confirmed', Rules\Password::defaults()],
-            'image' => 'required|image'
+            'image' => 'image'
         ]);
 
         $data = new User([
